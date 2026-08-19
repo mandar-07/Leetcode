@@ -5,6 +5,51 @@ from app.schemas.auth import RegisterRequest
 from app.core.security import hash_password
 
 
+from app.core.security import (
+    create_access_token,
+    hash_password,
+    verify_password,
+)
+
+
+def authenticate_user(
+    db: Session,
+    email: str,
+    password: str,
+):
+    user = (
+        db.query(User)
+        .filter(User.email == email)
+        .first()
+    )
+
+    if not user:
+        return None
+
+    if not verify_password(
+        password,
+        user.password_hash,
+    ):
+        return None
+
+    return user
+
+def login_user(
+    db: Session,
+    email: str,
+    password: str,
+):
+    user = authenticate_user(
+        db,
+        email,
+        password,
+    )
+
+    if not user:
+        raise ValueError("Invalid email or password")
+
+    return create_access_token(user.id)
+
 def create_user(
     db: Session,
     user_data: RegisterRequest
