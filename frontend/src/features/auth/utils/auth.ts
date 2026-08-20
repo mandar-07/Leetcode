@@ -1,35 +1,13 @@
-import api from "../../../shared/lib/api";
+const TOKEN_KEY = "access_token";
 
-import type { RegisterFormData } from "../schemas/registerSchema";
-import type { LoginFormData } from "../schemas/loginSchema";
-
-type LoginResponse = {
-    access_token: string;
-    token_type: string;
+export const setToken = (token: string) => {
+    localStorage.setItem(TOKEN_KEY, token);
 };
 
-export const registerUser = async (
-    data: RegisterFormData
-) => {
-    const response = await api.post(
-        "/auth/register",
-        {
-            username: data.username,
-            email: data.email,
-            password: data.password,
-        }
-    );
-
-    return response.data;
+export const getToken = (): string | null => {
+    return localStorage.getItem(TOKEN_KEY);
 };
 
-export const loginUser = async (
-    data: LoginFormData
-): Promise<LoginResponse> => {
-    const response = await api.post(
-        "/auth/login",
-        data
-    );
-
-    return response.data;
+export const removeToken = () => {
+    localStorage.removeItem(TOKEN_KEY);
 };

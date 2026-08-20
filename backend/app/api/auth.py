@@ -5,6 +5,10 @@ from app.database.database import get_db
 from app.schemas.auth import RegisterRequest, RegisterResponse
 from app.services.auth_service import create_user
 
+from app.api.dependencies import get_current_user
+from app.models.user import User
+from fastapi.security import OAuth2PasswordRequestForm
+
 from app.schemas.auth import (
     LoginRequest,
     LoginResponse,
@@ -23,32 +27,31 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "/login",
-    response_model=LoginResponse,
-)
+@router.get("/me")
+def get_me(
+    current_user: User = Depends(get_current_user),
+):
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email,
+    }
+
+@router.post("/login")
 def login(
-    request: LoginRequest,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
-    try:
-        access_token = login_user(
-            db,
-            request.email,
-            request.password,
-        )
+    access_token = login_user(
+        db,
+        form_data.username,
+        form_data.password,
+    )
 
-        return LoginResponse(
-            access_token=access_token,
-            token_type="bearer",
-        )
-
-    except ValueError as e:
-        raise HTTPException(
-            status_code=401,
-            detail=str(e),
-        )
-
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }
 
 @router.post(
     "/register",

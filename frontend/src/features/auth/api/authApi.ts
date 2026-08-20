@@ -8,16 +8,18 @@ type LoginResponse = {
     token_type: string;
 };
 
+export type CurrentUser = {
+    id: number;
+    username: string;
+    email: string;
+};
+
 export const registerUser = async (
     data: RegisterFormData
 ) => {
     const response = await api.post(
         "/auth/register",
-        {
-            username: data.username,
-            email: data.email,
-            password: data.password,
-        }
+        data
     );
 
     return response.data;
@@ -30,6 +32,12 @@ export const loginUser = async (
         "/auth/login",
         data
     );
+
+    return response.data;
+};
+
+export const getCurrentUser = async (): Promise<CurrentUser> => {
+    const response = await api.get("/auth/me");
 
     return response.data;
 };
