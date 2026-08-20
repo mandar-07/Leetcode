@@ -4,10 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database.database import Base, engine
 from app.models.user import User
 from app.api.auth import router as auth_router
+from app.models.problem import Problem
+from app.api.problems import router as problems_router
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="LeetCode Clone API")
+app.include_router(problems_router)
 
 app.add_middleware(
     CORSMiddleware,
