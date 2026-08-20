@@ -53,6 +53,9 @@ def login(
         "token_type": "bearer",
     }
 
+
+
+
 @router.post(
     "/register",
     response_model=RegisterResponse

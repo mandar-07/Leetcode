@@ -37,12 +37,15 @@ export default function Login() {
                 navigate("/");
             },
 
-            onError: (error: any) => {
-                toast.error(
-                    error.response?.data?.detail ??
-                    "Invalid email or password"
-                );
-            },
+          onError: (error: any) => {
+                const detail = error.response?.data?.detail;
+
+                if (Array.isArray(detail)) {
+                    toast.error(detail[0]?.msg || "Login failed");
+                } else {
+                    toast.error(detail || "Login failed");
+                }
+           },
         });
     };
 

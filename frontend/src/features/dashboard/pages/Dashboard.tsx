@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -21,6 +22,12 @@ export default function Dashboard() {
         navigate("/login");
     };
 
+    useEffect(() => {
+        if (isError) {
+            navigate("/login");
+        }
+    }, [isError, navigate]);
+
     if (isLoading) {
         return (
             <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
@@ -29,14 +36,12 @@ export default function Dashboard() {
         );
     }
 
-    if (isError || !user) {
-        navigate("/login");
+    if (!user) {
         return null;
     }
 
     return (
         <div className="min-h-screen bg-slate-900 text-white p-8">
-
             <div className="max-w-4xl mx-auto">
 
                 <div className="flex justify-between items-center">
@@ -61,7 +66,6 @@ export default function Dashboard() {
                 </div>
 
             </div>
-
         </div>
     );
 }
