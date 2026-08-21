@@ -9,12 +9,14 @@ from app.api.problems import router as problems_router
 from app.models.testcase import TestCase
 from app.models.submission import Submission
 from app.api.submissions import router as submissions_router
+from app.api.testcases import router as testcases_router
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="LeetCode Clone API")
 app.include_router(problems_router)
 app.include_router(submissions_router)
+app.include_router(testcases_router)
 
 app.add_middleware(
     CORSMiddleware,
