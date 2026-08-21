@@ -12,6 +12,34 @@ export type Problem = {
     created_at: string;
 };
 
+export type Submission = {
+    id: number;
+    problem_id: number;
+    language: string;
+    code: string;
+    status: string;
+    runtime: number | null;
+    memory: number | null;
+    created_at: string;
+};
+
+export const createSubmission = async (
+    problemId: number,
+    language: string,
+    code: string
+): Promise<Submission> => {
+    const response = await api.post(
+        "/submissions",
+        {
+            problem_id: problemId,
+            language,
+            code,
+        }
+    );
+
+    return response.data;
+};
+
 export const getProblems = async (): Promise<Problem[]> => {
     const response = await api.get("/problems");
 
