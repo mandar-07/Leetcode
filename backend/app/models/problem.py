@@ -63,3 +63,13 @@ class Problem(Base):
         onupdate=datetime.utcnow,
         nullable=False,
     )
+
+    function_name:Mapped[str]=mapped_column(
+        String(100),
+        nullable=False,
+    )
+
+    starter_code:Mapped[str|None]=mapped_column(
+        Text,
+        nullable=True,
+    )

@@ -43,6 +43,8 @@ def create_problem(
         constraints=request.constraints,
         input_format=request.input_format,
         output_format=request.output_format,
+        function_name=request.function_name,
+        starter_code=request.starter_code,
     )
 
     db.add(problem)

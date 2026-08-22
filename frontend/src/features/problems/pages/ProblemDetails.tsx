@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+
 
 import { getProblem } from "../api/problemApi";
 import CodeEditor from "../components/CodeEditor";
@@ -11,12 +12,7 @@ import { useSubmit } from "../../auth/hooks/useSubmit";
 export default function ProblemDetails() {
     const { slug } = useParams();
 
-    const [code, setCode] = useState(
-        `def twoSum(nums, target):
-    # Write your solution here
-    pass`
-    );
-
+    const [code, setCode] = useState("");
     type Language = "python" | "javascript" | "cpp" | "java";
 
     const [language, setLanguage] =
@@ -31,6 +27,12 @@ export default function ProblemDetails() {
         queryFn: () => getProblem(slug!),
         enabled: !!slug,
     });
+
+    useEffect(() => {
+        if (problem?.starter_code) {
+            setCode(problem.starter_code);
+        }
+    }, [problem]);
 
     const submitMutation = useSubmit();
 
